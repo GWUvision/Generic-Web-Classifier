@@ -8,3 +8,8 @@ Using LeNet architecture as the convolutional neural network of choice, with Ker
 
 Readme will be updated and organized as project progresses...
 
+TODO: find dataset with many images all tagged and original images such that when user asks for a specific *thing* the neural network will test against all pictures not associated with *thing*
+
+TODO: work on scraping online all image searches of the specific *thing* they want
+
+TOOD: essentially, goal is to make this generic and web based
