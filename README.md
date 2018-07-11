@@ -2,6 +2,9 @@
 
 ## A Generic Classifier for any image
 
+
+https://www.pyimagesearch.com/2017/12/11/image-classification-with-keras-and-deep-learning/
+
 The goal of the Generic Web Classifier is an upgrade from @Arkidillo and @benfernandez "generic incremental classifier": [Github Repository](https://github.com/Arkidillo/generic-incremental-classifier)
 
 Using LeNet architecture as the convolutional neural network of choice, with Keras and Tensorflow backend, a more accurate, but specified classifier is implemented for the user
