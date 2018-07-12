@@ -5,7 +5,7 @@
 # from selenium.webdriver.support import expected_conditions as EC
 # from selenium.webdriver.common.keys import Keys
 #
-# chromedriver = "/Users/kylerood/Generic-Web-Classifier/image-classification-keras/chromedriver"
+# chromedriver = "/Users/kylerood/Generic-Web-Classifier/chromedriver"
 # browser = webdriver.Chrome(chromedriver)
 # browser.get('https://images.google.com/')
 #
@@ -56,59 +56,58 @@
 #
 # #browser.quit()
 
-from bs4 import BeautifulSoup
-import requests
-import re
-import urllib.request
-import os
-import http.cookiejar
-import json
-
-def get_soup(url):
-    return BeautifulSoup(urllib.request.urlopen(url),'html.parser')
+from google_images_download import google_images_download
+import os, errno
+import time
 
 
-query = input("dogs")# you can change the query for the image  here
-image_type="ActiOn"
-query= query.split()
-query='+'.join(query)
-url="https://www.google.co.in/search?q="+query+"&source=lnms&tbm=isch"
-print(url)
-#add the directory for your image here
-DIR="Pictures"
-header={'User-Agent':"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.134 Safari/537.36"
-}
-soup = get_soup(url)
-
-
-ActualImages=[]# contains the link for Large original images, type of  image
-for a in soup.find_all("div",{"class":"rg_meta"}):
-    link , Type =json.loads(a.text)["ou"]  ,json.loads(a.text)["ity"]
-    ActualImages.append((link,Type))
-
-print("there are total" , len(ActualImages),"images")
-
-if not os.path.exists(DIR):
-            os.mkdir(DIR)
-DIR = os.path.join(DIR, query.split()[0])
-
-if not os.path.exists(DIR):
-            os.mkdir(DIR)
-###print images
-for i , (img , Type) in enumerate( ActualImages):
+def silent_remove_of_file(file):
     try:
-        raw_img = urllib.request.urlopen(img).read()
-
-        cntr = len([i for i in os.listdir(DIR) if image_type in i]) + 1
-        print(cntr)
-        if len(Type)==0:
-            f = open(os.path.join(DIR , image_type + "_"+ str(cntr)+".jpg"), 'wb')
-        else :
-            f = open(os.path.join(DIR , image_type + "_"+ str(cntr)+"."+Type), 'wb')
+        os.remove(file)
+    except OSError as e:
+        if e.errno != errno.ENOENT:
+            raise e
+        return False
+    return True
 
 
-        f.write(raw_img)
-        f.close()
-    except Exception as e:
-        print("could not load : "+img)
-        print(e)
+def test_download_images_to_default_location():
+    start_time = time.time()
+    arguments = {
+        "keywords": "Polar bears",
+        "limit": 5,
+        "print_urls": True
+    }
+    try:
+        temp = arguments['output_folder']
+    except KeyError:
+        pass
+    else:
+        assert False, "This test checks download to default location yet an output folder was provided"
+
+    output_folder_path = os.path.join(os.path.realpath('.'), 'downloads', '{}'.format(arguments['keywords']))
+    if os.path.exists(output_folder_path):
+        start_amount_of_files_in_output_folder = len([name for name in os.listdir(output_folder_path) if os.path.isfile(os.path.join(output_folder_path, name)) and os.path.getctime(os.path.join(output_folder_path, name)) < start_time])
+    else:
+        start_amount_of_files_in_output_folder = 0
+
+    response = google_images_download.googleimagesdownload()
+    response.download(arguments)
+    files_modified_after_test_started = [name for name in os.listdir(output_folder_path) if os.path.isfile(os.path.join(output_folder_path, name)) and os.path.getmtime(os.path.join(output_folder_path, name)) > start_time]
+    end_amount_of_files_in_output_folder = len(files_modified_after_test_started)
+    print(f"Files downloaded by test {__name__}:")
+    for file in files_modified_after_test_started:
+        print(os.path.join(output_folder_path, file))
+
+
+    # assert end_amount_of_files_in_output_folder - start_amount_of_files_in_output_folder == argumnets['limit']
+    assert end_amount_of_files_in_output_folder == arguments['limit']
+
+    print(f"Cleaning up all files downloaded by test {__name__}...")
+    for file in files_modified_after_test_started:
+        if silent_remove_of_file(os.path.join(output_folder_path, file)):
+            print(f"Deleted {os.path.join(output_folder_path, file)}")
+        else:
+            print(f"Failed to delete {os.path.join(output_folder_path, file)}")
+
+test_download_images_to_default_location()
