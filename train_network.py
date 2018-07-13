@@ -41,36 +41,43 @@ IMAGE_LABEL = 'santa'
 EPOCHS = 25
 INIT_LR = 1e-3
 BS = 32
+path = '256_ObjectCategories'
+
 
 master_data = []
 master_labels = []
 
+categories = []
+for root, dirs, files in os.walk(path, topdown=False):
+    for name in dirs:
+        print(name.split('.'))
+        
+        
+# 
+# # initialize the data and labels
+# print("[INFO] loading images...")
+# data = []
+# labels = []
+# 
+# # grab the image paths and randomly shuffle them
+# imagePaths = sorted(list(paths.list_images('256_ObjectCategories/002.american-flag')))
+# random.seed(42)
+# random.shuffle(imagePaths)
+# 
+# for imagePath in imagePaths:
+# 
+#     image = cv2.imread(imagePath)
+#     image = cv2.resize(image, (28, 28))
+#     image = img_to_array(image)
+#     data.append(image)
+# 
+#     label = imagePath.split(os.path.sep)[-2]
+#     print(label)
+#     if label == '002.american-flag':
+#         label = 2 # take first part of path, convert from str to int
+# 
+#     labels.append(label)
 
-# initialize the data and labels
-print("[INFO] loading images...")
-data = []
-labels = []
-
-# grab the image paths and randomly shuffle them
-imagePaths = sorted(list(paths.list_images('256_ObjectCategories/002.american-flag')))
-random.seed(42)
-random.shuffle(imagePaths)
-
-for imagePath in imagePaths:
-    
-    image = cv2.imread(imagePath)
-    image = cv2.resize(image, (28, 28))
-    image = img_to_array(image)
-    data.append(image)
-    
-    label = imagePath.split(os.path.sep)[-2]
-    print(label)
-    if label == '002.american-flag':
-        label = 2 # take first part of path, convert from str to int
-
-    labels.append(label)
-
-print(len(labels))
     
 
 # loop over the input images
