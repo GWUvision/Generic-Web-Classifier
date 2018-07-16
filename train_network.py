@@ -53,14 +53,14 @@ for root, dirs, files in os.walk(path, topdown=False):
         categories.append(name.split('.'))
         #print(name.split('.'))
 
-print(categories)
+data = []
+labels = []
 
+print(categories)
 
 for c in categories:
     # initialize the data and labels
     print("[INFO] loading images from " + str(c[1]))
-    data = []
-    labels = []
 
     path = '256_ObjectCategories/' + str(c[0]) + '.' + str(c[1])
 
@@ -77,9 +77,13 @@ for c in categories:
 
         label = imagePath.split(os.path.sep)[-2]
 
+        #print("label:" + label)
+        #print("category:" + c[1])
 
-        if(label == c[1]): #c is the category
-            label = int(c[:3]) # take first part of path, convert from str to int
+        if(label[4:] == c[1]): #c is the category
+            label = int(c[0]) # take first part of path, convert from str to int
+        else:
+            label = 0
 
         labels.append(label)
 
@@ -87,19 +91,15 @@ for c in categories:
 data = np.array(data, dtype="float") / 255.0
 labels = np.array(labels)
 
-
-
-
-
 # partition the data into training and testing splits using 75% of
 # the data for training and the remaining 25% for testing
-(trainX, testX, trainY, testY) = train_test_split(
-    data, labels, test_size=0.25, random_state=42)
+(trainX, testX, trainY, testY) = train_test_split(data, labels, test_size=0.25, random_state=42)
 
 
 # convert the labels from integers to vectors
-trainY = to_categorical(trainY, num_classes=2)
-testY = to_categorical(testY, num_classes=2)
+#print(trainY)
+trainY = to_categorical(trainY, num_classes=50)
+testY = to_categorical(testY, num_classes=50)
 
 # construct the image generator for data augmentation
 aug = ImageDataGenerator(rotation_range=30, width_shift_range=0.1,
@@ -108,7 +108,7 @@ aug = ImageDataGenerator(rotation_range=30, width_shift_range=0.1,
 
 # initialize the model
 print("[INFO] compiling model...")
-model = LeNet.build(width=28, height=28, depth=3, classes=2)
+model = LeNet.build(width=28, height=28, depth=3, classes=50)
 opt = Adam(lr=INIT_LR, decay=INIT_LR / EPOCHS)
 model.compile(loss="binary_crossentropy", optimizer=opt,
               metrics=["accuracy"])
@@ -122,19 +122,19 @@ H = model.fit_generator(aug.flow(trainX, trainY, batch_size=BS),
 
 # save the model to disk
 print("[INFO] serializing network...")
-model.save(args["model"])
+model.save("example_model")
 
-# plot the training loss and accuracy
-plt.style.use("ggplot")
-plt.figure()
-N = EPOCHS
-plt.plot(np.arange(0, N), H.history["loss"], label="train_loss")
-plt.plot(np.arange(0, N), H.history["val_loss"], label="val_loss")
-plt.plot(np.arange(0, N), H.history["acc"], label="train_acc")
-plt.plot(np.arange(0, N), H.history["val_acc"], label="val_acc")
-plt.title(
-    "Training Loss and Accuracy on {0}/NOT {0}".format(IMAGE_LABEL.upper()))
-plt.xlabel("Epoch #")
-plt.ylabel("Loss/Accuracy")
-plt.legend(loc="lower left")
-plt.savefig(args["plot"])
+# # plot the training loss and accuracy
+# plt.style.use("ggplot")
+# plt.figure()
+# N = EPOCHS
+# plt.plot(np.arange(0, N), H.history["loss"], label="train_loss")
+# plt.plot(np.arange(0, N), H.history["val_loss"], label="val_loss")
+# plt.plot(np.arange(0, N), H.history["acc"], label="train_acc")
+# plt.plot(np.arange(0, N), H.history["val_acc"], label="val_acc")
+# plt.title(
+#     "Training Loss and Accuracy on {0}/NOT {0}".format(IMAGE_LABEL.upper()))
+# plt.xlabel("Epoch #")
+# plt.ylabel("Loss/Accuracy")
+# plt.legend(loc="lower left")
+# plt.savefig(args["plot"])
