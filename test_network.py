@@ -33,6 +33,8 @@ image = np.expand_dims(image, axis=0)
 print("[INFO] loading network...")
 model = load_model(args["model"])
 
+print(model.predict(image)[0])
+
 # classify the input image
 (notSanta, santa) = model.predict(image)[0]
 
