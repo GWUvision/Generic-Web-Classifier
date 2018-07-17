@@ -32,9 +32,12 @@ print("[INFO] loading network...")
 model = load_model('example_model')
 
 
-print(model.predict(image)[0])
-
-
+# print(model.predict(image)[0])
+y_prob = model.predict(image)
+print(y_prob.shape)
+print(y_prob)
+y_classes = y_prob.argmax()
+print(y_classes)
 # print(len(model.predict(image)))
 
 # classify the input image
