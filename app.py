@@ -21,6 +21,9 @@ def index_post():
 
         user_word = request.form['name']
 
+        command = "python google_images_download.py --keywords " + user_word +  " --limit 150 --chromedriver '/Users/kylerood/Generic-Web-Classifier/chromedriver'"
+        os.system(command)
+
         return render_template('index.html', user_word=request.form['name'])
 
     elif request.form['name'] is None:
