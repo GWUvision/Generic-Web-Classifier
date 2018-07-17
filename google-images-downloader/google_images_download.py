@@ -1,4 +1,5 @@
 #Use this command in the same directory to run
+
 #python google_images_download.py --keywords "Polar bears" --limit 1000 --chromedriver '/Users/kylerood/Generic-Web-Classifier/chromedriver'
 
 #!/usr/bin/env python
