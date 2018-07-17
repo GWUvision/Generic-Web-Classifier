@@ -24,7 +24,6 @@ import cv2
 import os
 
 
-IMAGE_LABEL = 'santa'
 
 # construct the argument parse and parse the arguments
 # ap = argparse.ArgumentParser()
@@ -124,17 +123,17 @@ H = model.fit_generator(aug.flow(trainX, trainY, batch_size=BS),
 print("[INFO] serializing network...")
 model.save("example_model")
 
-# # plot the training loss and accuracy
-# plt.style.use("ggplot")
-# plt.figure()
-# N = EPOCHS
-# plt.plot(np.arange(0, N), H.history["loss"], label="train_loss")
-# plt.plot(np.arange(0, N), H.history["val_loss"], label="val_loss")
-# plt.plot(np.arange(0, N), H.history["acc"], label="train_acc")
-# plt.plot(np.arange(0, N), H.history["val_acc"], label="val_acc")
-# plt.title(
-#     "Training Loss and Accuracy on {0}/NOT {0}".format(IMAGE_LABEL.upper()))
-# plt.xlabel("Epoch #")
-# plt.ylabel("Loss/Accuracy")
-# plt.legend(loc="lower left")
-# plt.savefig(args["plot"])
+# plot the training loss and accuracy
+plt.style.use("ggplot")
+plt.figure()
+N = EPOCHS
+plt.plot(np.arange(0, N), H.history["loss"], label="train_loss")
+plt.plot(np.arange(0, N), H.history["val_loss"], label="val_loss")
+plt.plot(np.arange(0, N), H.history["acc"], label="train_acc")
+plt.plot(np.arange(0, N), H.history["val_acc"], label="val_acc")
+plt.title(
+    "Training Loss and Accuracy on {0}/NOT {0}".format())
+plt.xlabel("Epoch #")
+plt.ylabel("Loss/Accuracy")
+plt.legend(loc="lower left")
+plt.savefig(args["plot"])
