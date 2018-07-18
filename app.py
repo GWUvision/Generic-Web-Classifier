@@ -1,6 +1,7 @@
 import os
 import requests
 from flask import Flask, render_template, request, redirect, url_for, g, flash
+import shutil
 
 
 STATIC_FOLDER = 'static'
@@ -20,9 +21,17 @@ def index_post():
     if request.form['name'] is not None:
 
         user_word = request.form['name']
+        user_word = user_word.replace(" ", "-")
+        print("Creating Directory")
+        os.makedirs(
+            '256_ObjectCategories/258.{0}/'.format(user_word), exist_ok=True)
 
-        command = "python google_images_download.py --keywords " + user_word +  " --limit 150 --chromedriver '/Users/kylerood/Generic-Web-Classifier/chromedriver'"
+        command = "python google_images_download.py --keywords " + user_word + \
+            " --limit 150 --chromedriver '/Users/kylerood/Generic-Web-Classifier/chromedriver'"
         os.system(command)
+        
+        print("Deleting Directory")
+        shutil.rmtree('256_ObjectCategories/258.{0}/'.format(user_word))
 
         return render_template('index.html', user_word=request.form['name'])
 
