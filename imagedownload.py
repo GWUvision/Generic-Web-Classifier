@@ -1,4 +1,3 @@
-#!/pless_nfs/home/krood20/AMOSEast/env/bin/python
 import datetime
 import gevent
 import hashlib
@@ -20,7 +19,8 @@ from socket import error as SocketError
 from urllib.parse import urlparse
 
 monkey.patch_socket()
-pool = Pool(30)
+pool = Pool(100)
+os.makedirs('test/', exist_ok=True)
 
 df = pd.read_csv('output.csv', error_bad_lines=False)
 
@@ -35,8 +35,6 @@ df.reset_index(inplace=True)
 url_list = df.values.tolist()
 # print(url_list)
 
-# TODO: Figure out how to get index from dataframe and put in a list in a list with the index and the url and then thread it
-
 # camera_urls = []
 # for camera in cameras:
 #     # append the index, url, and current hash to a list
@@ -47,11 +45,10 @@ url_list = df.values.tolist()
 def download_file(index, url):
     # print('starting %s' % url)
     try:
-        context = ssl._create_unverified_context()
-        data = urllib.request.urlopen(url, context=context, timeout=3).read()
+        #context = ssl._create_unverified_context()
+        data = urllib.request.urlopen(url, timeout=3).read()
         filepath = '258.{0}.jpg'.format((str(index+1)).zfill(4))
 
-        os.makedirs('test/', exist_ok=True)
         f = open('test/{0}'.format(filepath), 'wb')
         f.write(data)
         f.close()
@@ -75,12 +72,9 @@ def download_file(index, url):
         print(err)
     except SocketError as err:
         print(err)
-        
+
 begin = time.time()
 jobs = [pool.spawn(download_file, index, url) for index, url in url_list]
 end = time.time()
 print('time: ', end-begin)
 print('Downloaded images')
-
-
-
