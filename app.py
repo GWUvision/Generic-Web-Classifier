@@ -28,11 +28,17 @@ def index_post():
         os.makedirs(
             '256_ObjectCategories/258.{0}/'.format(user_word), exist_ok=True)
 
+            #grab urls
         command = "python google_images_download.py --keywords " + user_word + \
             " --limit 150 --chromedriver '/Users/kylerood/Generic-Web-Classifier/chromedriver'"
         os.system(command)
 
+        #download images
         command = "python imagedownload.py " + user_word
+        os.system(command)
+
+        #train network
+        command = "python train_network.py"
         os.system(command)
 
         print("Deleting Directory")
