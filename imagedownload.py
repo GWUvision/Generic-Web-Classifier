@@ -6,6 +6,9 @@ import os
 import csv
 import requests
 import http.client
+import ssl
+import time
+
 import urllib.request
 import pandas as pd
 
@@ -24,10 +27,13 @@ df = pd.read_csv('output.csv', error_bad_lines=False)
 # print(df)
 df.columns = ['url', 'extra']
 df.drop(['extra'], axis=1, inplace=True)
-print(df.head())
-
-url_list = df['url'].tolist()
-print(url_list)
+# print(df.head())
+df.index.names = ['index']
+df.reset_index(inplace=True)
+# print(df.head())
+# url_list = df[['index', 'url']].tolist()
+url_list = df.values.tolist()
+# print(url_list)
 
 # TODO: Figure out how to get index from dataframe and put in a list in a list with the index and the url and then thread it
 
@@ -41,15 +47,15 @@ print(url_list)
 def download_file(index, url):
     # print('starting %s' % url)
     try:
-        data = urllib.request.urlopen(url, timeout=5).read()
-        filename = os.path.basename('258_{0}'.format(index))
-        filepath = '%s/%s_%s.jpg' % (index, index, filename)
+        context = ssl._create_unverified_context()
+        data = urllib.request.urlopen(url, context=context, timeout=3).read()
+        filepath = '258.{0}.jpg'.format((str(index+1)).zfill(4))
 
-        os.makedirs('test/{0}'.format(index), exist_ok=True)
-        f = open('test%s/258_%s.jpg' % (index, index, filename), 'wb')
+        os.makedirs('test/', exist_ok=True)
+        f = open('test/{0}'.format(filepath), 'wb')
         f.write(data)
         f.close()
-        print("[INFO] Image from Camera %s is different. Saving image..." % (index))
+        print("[INFO] Image from {0} is different. Saving image...".format(index+1))
 
     except urllib.error.HTTPError as err:
         print(err)
@@ -69,9 +75,12 @@ def download_file(index, url):
         print(err)
     except SocketError as err:
         print(err)
-
-
-jobs = [pool.spawn(download_file, url)
-        for url in url_list]
-
+        
+begin = time.time()
+jobs = [pool.spawn(download_file, index, url) for index, url in url_list]
+end = time.time()
+print('time: ', end-begin)
 print('Downloaded images')
+
+
+
