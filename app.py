@@ -24,25 +24,28 @@ def index_post():
 
         user_word = request.form['name']
         user_word = user_word.replace(" ", "-")
+        print(user_word)
         print("Creating Directory")
         os.makedirs(
             '256_ObjectCategories/258.{0}/'.format(user_word), exist_ok=True)
 
             #grab urls
         command = "python google_images_download.py --keywords " + user_word + \
-            " --limit 150 --chromedriver '/Users/kylerood/Generic-Web-Classifier/chromedriver'"
+            " --limit 150 --chromedriver '/home/suraj/Documents/GWU/Generic-Web-Classifier/chromedriver'"
+            
+        print(command)
         os.system(command)
 
         #download images
-        command = "python imagedownload.py " + user_word
-        os.system(command)
+        command2 = "python imagedownload.py " + user_word
+        os.system(command2)
 
         #train network
-        command = "python train_network.py"
-        os.system(command)
+        command3 = "python train_network.py"
+        os.system(command3)
 
-        print("Deleting Directory")
-        shutil.rmtree('256_ObjectCategories/258.{0}/'.format(user_word))
+        # print("Deleting Directory")
+        # shutil.rmtree('256_ObjectCategories/258.{0}/'.format(user_word))
 
         #timing
         end = time.time()
