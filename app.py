@@ -2,6 +2,7 @@ import os
 import requests
 from flask import Flask, render_template, request, redirect, url_for, g, flash
 import shutil
+import time
 
 
 STATIC_FOLDER = 'static'
@@ -19,6 +20,7 @@ def index():
 def index_post():
 
     if request.form['name'] is not None:
+        begin = time.time()
 
         user_word = request.form['name']
         user_word = user_word.replace(" ", "-")
@@ -29,9 +31,16 @@ def index_post():
         command = "python google_images_download.py --keywords " + user_word + \
             " --limit 150 --chromedriver '/Users/kylerood/Generic-Web-Classifier/chromedriver'"
         os.system(command)
-        
+
+        command = "python imagedownload.py " + user_word
+        os.system(command)
+
         print("Deleting Directory")
         shutil.rmtree('256_ObjectCategories/258.{0}/'.format(user_word))
+
+        #timing
+        end = time.time()
+        print('Total time: ', end-begin)
 
         return render_template('index.html', user_word=request.form['name'])
 

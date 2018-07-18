@@ -7,6 +7,7 @@ import requests
 import http.client
 import ssl
 import time
+import sys
 
 import urllib.request
 import pandas as pd
@@ -20,7 +21,9 @@ from urllib.parse import urlparse
 
 monkey.patch_socket()
 pool = Pool(100)
-os.makedirs('test/', exist_ok=True)
+
+#the users words
+user_word = sys.argv[1]
 
 df = pd.read_csv('output.csv', error_bad_lines=False)
 
@@ -49,7 +52,7 @@ def download_file(index, url):
         data = urllib.request.urlopen(url, timeout=3).read()
         filepath = '258.{0}.jpg'.format((str(index+1)).zfill(4))
 
-        f = open('test/{0}'.format(filepath), 'wb')
+        f = open('256_ObjectCategories/258.{0}/{1}'.format(user_word, filepath), 'wb')
         f.write(data)
         f.close()
         print("[INFO] Image from {0} is different. Saving image...".format(index+1))
@@ -73,8 +76,5 @@ def download_file(index, url):
     except SocketError as err:
         print(err)
 
-begin = time.time()
 jobs = [pool.spawn(download_file, index, url) for index, url in url_list]
-end = time.time()
-print('time: ', end-begin)
 print('Downloaded images')
