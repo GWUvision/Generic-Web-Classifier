@@ -504,7 +504,7 @@ class googleimagesdownload:
 
     # Download Images
     def download_image(self,image_url,image_format,main_directory,dir_name,count,print_urls,socket_timeout,prefix,print_size,no_numbering):
-        fd = open('output.csv','a')
+        fd = open('output.csv','a+')
         fd.write(image_url + ",\n")
         fd.close()
 
