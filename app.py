@@ -28,28 +28,26 @@ def index_post():
         os.makedirs(
             '256_ObjectCategories/258.{0}/'.format(user_word), exist_ok=True)
 
-            #grab urls
+        # grab urls
         command = "python google_images_download.py --keywords " + user_word + \
-            " --limit 200 --chromedriver '/Users/kylerood/Generic-Web-Classifier/chromedriver'"
+            " --limit 200 --chromedriver '/home/suraj/Documents/GWU/Generic-Web-Classifier/chromedriver2'"
         os.system(command)
 
-        #download images
+        # download images
         command = "python imagedownload.py " + user_word
         os.system(command)
 
-        #train network
+        # train network
         command = "python train_network.py"
         os.system(command)
 
-        #reset the stuff
-        #print("Deleting Directory")
-        #shutil.rmtree('256_ObjectCategories/258.{0}/'.format(user_word))
-        #os.remove("output.csv")
+        # reset the stuff
+        # print("Deleting Directory...")
+        # shutil.rmtree('256_ObjectCategories/258.{0}/'.format(user_word))
 
-
-        #timing
+        # timing
         end = time.time()
-        print('Total time: ', end-begin)
+        print('Total time: ', end - begin)
 
         return render_template('index.html', user_word=request.form['name'])
 
