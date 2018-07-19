@@ -30,7 +30,7 @@ def index_post():
 
             #grab urls
         command = "python google_images_download.py --keywords " + user_word + \
-            " --limit 150 --chromedriver '/Users/kylerood/Generic-Web-Classifier/chromedriver'"
+            " --limit 200 --chromedriver '/Users/kylerood/Generic-Web-Classifier/chromedriver'"
         os.system(command)
 
         #download images
@@ -42,10 +42,10 @@ def index_post():
         os.system(command)
 
         #reset the stuff
-        print("Deleting Directory")
-        shutil.rmtree('256_ObjectCategories/258.{0}/'.format(user_word))
-        os.remove("output.csv")
-        
+        #print("Deleting Directory")
+        #shutil.rmtree('256_ObjectCategories/258.{0}/'.format(user_word))
+        #os.remove("output.csv")
+
 
         #timing
         end = time.time()
