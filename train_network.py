@@ -70,7 +70,7 @@ for c in categories:
     random.shuffle(imagePaths)
 
     for index, imagePath in enumerate(imagePaths):
-        print(imagePath)
+        #print(imagePath)
         try:
             im = Image.open(imagePath)
 
@@ -108,9 +108,9 @@ labels = np.array(labels)
 
 
 # convert the labels from integers to vectors
-#print(trainY)
-trainY = to_categorical(trainY, num_classes=258)
-testY = to_categorical(testY, num_classes=258)
+print(trainY)
+trainY = to_categorical(trainY, num_classes=259)
+testY = to_categorical(testY, num_classes=259)
 
 # construct the image generator for data augmentation
 aug = ImageDataGenerator(rotation_range=30, width_shift_range=0.1,
@@ -119,7 +119,7 @@ aug = ImageDataGenerator(rotation_range=30, width_shift_range=0.1,
 
 # initialize the model
 print("[INFO] compiling model...")
-model = LeNet.build(width=28, height=28, depth=3, classes=258)
+model = LeNet.build(width=28, height=28, depth=3, classes=259)
 opt = Adam(lr=INIT_LR, decay=INIT_LR / EPOCHS)
 model.compile(loss="binary_crossentropy", optimizer=opt,
               metrics=["accuracy"])
