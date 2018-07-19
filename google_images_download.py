@@ -690,7 +690,7 @@ class googleimagesdownload:
                     else:
                         dir_name = search_term + ('-' + arguments['color'] if arguments['color'] else '')   #sub-directory
 
-                    self.create_directories(main_directory,dir_name,arguments['thumbnail'])     #create directories in OS
+                    #self.create_directories(main_directory,dir_name,arguments['thumbnail'])     #create directories in OS
 
                     params = self.build_url_parameters(arguments)     #building URL with params
 
