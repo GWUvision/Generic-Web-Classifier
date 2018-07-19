@@ -52,11 +52,11 @@ print(model.predict(image)[0])
 # proba = santa if santa > notSanta else notSanta
 # label = "{}: {:.2f}%".format(label, proba * 100)
 #
-# # draw the label on the image
+# draw the label on the image
 # output = imutils.resize(orig, width=400)
-# cv2.putText(output, label, (10, 25),  cv2.FONT_HERSHEY_SIMPLEX,
+# cv2.putText(output, 'YES', (10, 25),  cv2.FONT_HERSHEY_SIMPLEX,
 # 	0.7, (0, 255, 0), 2)
-#
+# 
 # # show the output image
 # cv2.imshow("Output", output)
 # cv2.waitKey(0)
