@@ -22,6 +22,7 @@ import argparse
 import random
 import cv2
 import os
+from PIL import Image
 
 
 
@@ -69,22 +70,33 @@ for c in categories:
     random.shuffle(imagePaths)
 
     for index, imagePath in enumerate(imagePaths):
-        image = cv2.imread(imagePath)
-        image = cv2.resize(image, (28, 28))
-        image = img_to_array(image)
-        data.append(image)
+        print(imagePath)
+        try:
+            im = Image.open(imagePath)
 
-        label = imagePath.split(os.path.sep)[-2]
+            image = cv2.imread(imagePath)
+            image = cv2.resize(image, (28, 28))
+            image = img_to_array(image)
+            data.append(image)
 
-        #print("label:" + label)
-        #print("category:" + c[1])
+            label = imagePath.split(os.path.sep)[-2]
 
-        if(label[4:] == c[1]): #c is the category
-            label = int(c[0]) # take first part of path, convert from str to int
-        else:
-            label = 0
+            #print("label:" + label)
+            #print("category:" + c[1])
 
-        labels.append(label)
+            if(label[4:] == c[1]): #c is the category
+                label = int(c[0]) # take first part of path, convert from str to int
+            else:
+                label = 0
+
+            labels.append(label)
+
+        except IOError as e:
+            print(e)
+            pass
+        except SyntaxError as e:
+            print(e)
+            pass
 
 # scale the raw pixel intensities to the range [0, 1]
 data = np.array(data, dtype="float") / 255.0
@@ -97,8 +109,8 @@ labels = np.array(labels)
 
 # convert the labels from integers to vectors
 #print(trainY)
-trainY = to_categorical(trainY, num_classes=50)
-testY = to_categorical(testY, num_classes=50)
+trainY = to_categorical(trainY, num_classes=258)
+testY = to_categorical(testY, num_classes=258)
 
 # construct the image generator for data augmentation
 aug = ImageDataGenerator(rotation_range=30, width_shift_range=0.1,
@@ -107,7 +119,7 @@ aug = ImageDataGenerator(rotation_range=30, width_shift_range=0.1,
 
 # initialize the model
 print("[INFO] compiling model...")
-model = LeNet.build(width=28, height=28, depth=3, classes=50)
+model = LeNet.build(width=28, height=28, depth=3, classes=258)
 opt = Adam(lr=INIT_LR, decay=INIT_LR / EPOCHS)
 model.compile(loss="binary_crossentropy", optimizer=opt,
               metrics=["accuracy"])

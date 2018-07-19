@@ -29,8 +29,14 @@ def index_post():
             '256_ObjectCategories/258.{0}/'.format(user_word), exist_ok=True)
 
         # grab urls
+        #for suraj
+        # command = "python google_images_download.py --keywords " + user_word + \
+        #     " --limit 200 --chromedriver '/home/suraj/Documents/GWU/Generic-Web-Classifier/chromedriver2'"
+
+        #for kyle
         command = "python google_images_download.py --keywords " + user_word + \
-            " --limit 200 --chromedriver '/home/suraj/Documents/GWU/Generic-Web-Classifier/chromedriver2'"
+            " --limit 200 --chromedriver '/Users/kylerood/Generic-Web-Classifier/chromedriver'"
+
         os.system(command)
 
         # download images
