@@ -25,7 +25,6 @@ import os
 from PIL import Image
 
 
-
 # construct the argument parse and parse the arguments
 # ap = argparse.ArgumentParser()
 # ap.add_argument("-d", "--dataset", required=True,
@@ -51,7 +50,7 @@ categories = []
 for root, dirs, files in os.walk(path, topdown=False):
     for name in dirs:
         categories.append(name.split('.'))
-        #print(name.split('.'))
+        # print(name.split('.'))
 
 data = []
 labels = []
@@ -70,7 +69,7 @@ for c in categories:
     random.shuffle(imagePaths)
 
     for index, imagePath in enumerate(imagePaths):
-        #print(imagePath)
+        # print(imagePath)
         try:
             im = Image.open(imagePath)
 
@@ -84,8 +83,9 @@ for c in categories:
             #print("label:" + label)
             #print("category:" + c[1])
 
-            if(label[4:] == c[1]): #c is the category
-                label = int(c[0]) # take first part of path, convert from str to int
+            if(label[4:] == c[1]):  # c is the category
+                # take first part of path, convert from str to int
+                label = int(c[0])
             else:
                 label = 0
 
@@ -104,7 +104,8 @@ labels = np.array(labels)
 
 # partition the data into training and testing splits using 75% of
 # the data for training and the remaining 25% for testing
-(trainX, testX, trainY, testY) = train_test_split(data, labels, test_size=0.25, random_state=42)
+(trainX, testX, trainY, testY) = train_test_split(
+    data, labels, test_size=0.25, random_state=42)
 
 
 # convert the labels from integers to vectors

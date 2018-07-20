@@ -34,13 +34,13 @@ model = load_model('example_model')
 
 # print(model.predict(image)[0])
 y_prob = model.predict(image)
-print(y_prob.shape)
-print(y_prob)
+# print(y_prob.shape)
+# print(y_prob)
 y_classes = y_prob.argmax()
-print(y_classes)
+print("Predicted object class: ", y_classes)
 # print(len(model.predict(image)))
 
-print(model.predict(image)[0])
+# print(model.predict(image)[0])
 
 # classify the input image
 
