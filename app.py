@@ -18,11 +18,16 @@ configure_uploads(app, photos)
 def upload():
     if request.method == 'POST' and 'photo' in request.files:
         filename = photos.save(request.files['photo'])
-        
+
         results = 0
-        
+
+        command = "python test_network.py --image /Users/kylerood/Generic-Web-Classifier/static/" + filename
+
+        output = os.system(command)
+        print(output)
+
         return render_template('upload.html', filename=filename, results=results)
-        
+
     return render_template('upload.html')
 
 
