@@ -8,6 +8,7 @@ import http.client
 import ssl
 import time
 import sys
+import magic
 
 import urllib.request
 import pandas as pd
@@ -56,6 +57,14 @@ def download_file(index, url):
         f.write(data)
         f.close()
         print("[INFO] Image from {0} is different. Saving image...".format(index+1))
+
+        full_path = "/Users/kylerood/Generic-Web-Classifier/256_ObjectCategories/258." + user_word + "/" + filepath
+
+        if magic.from_file(full_path, mime=True) == 'image/jpeg':
+            print("[INFO] Image from {0} is different. Saving image...".format(index+1))
+        else:
+            os.remove(filepath)
+            print("Wrong file type.")
 
     except urllib.error.HTTPError as err:
         print(err)
