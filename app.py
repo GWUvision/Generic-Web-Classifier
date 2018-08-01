@@ -3,11 +3,27 @@ import requests
 from flask import Flask, render_template, request, redirect, url_for, g, flash
 import shutil
 import time
+from flask_uploads import UploadSet, configure_uploads, IMAGES
 
 
 STATIC_FOLDER = 'static'
 app = Flask(__name__, static_folder=STATIC_FOLDER)
 app.secret_key = 'secret_key'
+photos = UploadSet('photos', IMAGES)
+app.config['UPLOADED_PHOTOS_DEST'] = 'static/'
+configure_uploads(app, photos)
+
+
+@app.route('/upload', methods=['GET', 'POST'])
+def upload():
+    if request.method == 'POST' and 'photo' in request.files:
+        filename = photos.save(request.files['photo'])
+        
+        results = 0
+        
+        return render_template('upload.html', filename=filename, results=results)
+        
+    return render_template('upload.html')
 
 
 @app.route('/')
@@ -29,11 +45,11 @@ def index_post():
             '256_ObjectCategories/258.{0}/'.format(user_word), exist_ok=True)
 
         # grab urls
-        #for suraj
+        # for suraj
         # command = "python google_images_download.py --keywords " + user_word + \
         #     " --limit 200 --chromedriver '/home/suraj/Documents/GWU/Generic-Web-Classifier/chromedriver2'"
 
-        #for kyle
+        # for kyle
         command = "python google_images_download.py --keywords " + user_word + \
             " --limit 200 --chromedriver '/Users/kylerood/Generic-Web-Classifier/chromedriver'"
 
