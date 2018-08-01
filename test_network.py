@@ -10,15 +10,15 @@ import imutils
 import cv2
 import sys
 
-def test_network_classifier():
+def test_network_classifier(image, model):
 	# construct the argument parse and parse the arguments
-	ap = argparse.ArgumentParser()
-	ap.add_argument("-i", "--image", required=True,
-		help="path to input image")
-	args = vars(ap.parse_args())
+	# ap = argparse.ArgumentParser()
+	# ap.add_argument("-i", "--image", required=True,
+	# 	help="path to input image")
+	# args = vars(ap.parse_args())
 
 	# load the image
-	image = cv2.imread(args["image"])
+	image = cv2.imread(image)
 	#orig = image.copy()
 
 	# pre-process the image for classification
@@ -29,7 +29,7 @@ def test_network_classifier():
 
 	# load the trained convolutional neural network
 	print("[INFO] loading network...")
-	model = load_model('example_model')
+	model = load_model(model)
 
 
 	# print(model.predict(image)[0])
@@ -42,7 +42,7 @@ def test_network_classifier():
 	return y_classes
 
 
-test_network_classifier()
+# test_network_classifier()
 # print(len(model.predict(image)))
 
 # print(model.predict(image)[0])

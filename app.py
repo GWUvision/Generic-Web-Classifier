@@ -1,10 +1,10 @@
 import os
 import requests
-from flask import Flask, render_template, request, redirect, url_for, g, flash
+from flask import Flask, render_template, request, redirect, url_for, g, flash, session
 import shutil
 import time
 from flask_uploads import UploadSet, configure_uploads, IMAGES
-
+import test_network
 
 STATIC_FOLDER = 'static'
 app = Flask(__name__, static_folder=STATIC_FOLDER)
@@ -18,18 +18,34 @@ configure_uploads(app, photos)
 def upload():
     if request.method == 'POST' and 'photo' in request.files:
         filename = photos.save(request.files['photo'])
+        
+        session['filename'] = filename
 
-        results = 0
+        print(session['filename'])
+        # results = 0
 
-        command = "python test_network.py --image /Users/kylerood/Generic-Web-Classifier/static/" + filename
+        # command = "python test_network.py --image /Users/kylerood/Generic-Web-Classifier/static/" + filename
 
-        output = os.system(command)
-        print(output)
+        # output = os.system(command)
+        
+        # print(output)
+        
+        return redirect(url_for('result'))
 
-        return render_template('upload.html', filename=filename, results=results)
+        # return render_template('upload.html', filename=filename, results=results)
 
     return render_template('upload.html')
 
+@app.route('/result', methods=['GET', 'POST'])
+def result():
+    
+    print(session['filename'])
+    
+    output = test_network.test_network_classifier(session['filename'], 'example_model')
+    
+    return output
+    
+    
 
 @app.route('/')
 def index():
