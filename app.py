@@ -18,18 +18,10 @@ configure_uploads(app, photos)
 def upload():
     if request.method == 'POST' and 'photo' in request.files:
         filename = photos.save(request.files['photo'])
-        
-        session['filename'] = filename
 
-        print(session['filename'])
-        # results = 0
+        cwd = os.getcwd()
+        session['filepath'] = cwd + "/static/" + filename
 
-        # command = "python test_network.py --image /Users/kylerood/Generic-Web-Classifier/static/" + filename
-
-        # output = os.system(command)
-        
-        # print(output)
-        
         return redirect(url_for('result'))
 
         # return render_template('upload.html', filename=filename, results=results)
@@ -38,14 +30,14 @@ def upload():
 
 @app.route('/result', methods=['GET', 'POST'])
 def result():
-    
-    print(session['filename'])
-    
-    output = test_network.test_network_classifier(session['filename'], 'example_model')
-    
-    return output
-    
-    
+
+    output = test_network.test_network_classifier(str(session['filepath']), 'example_model')
+
+    print("Your image was of a(n): ", output)
+
+    return render_template('index.html')
+
+
 
 @app.route('/')
 def index():
