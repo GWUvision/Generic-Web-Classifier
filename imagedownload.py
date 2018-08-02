@@ -21,7 +21,7 @@ from socket import error as SocketError
 from urllib.parse import urlparse
 
 monkey.patch_socket()
-pool = Pool(100)
+pool = Pool(30)
 
 #the users words
 user_word = sys.argv[1]
@@ -56,17 +56,16 @@ def download_file(index, url):
         f = open('256_ObjectCategories/258.{0}/{1}'.format(user_word, filepath), 'wb')
         f.write(data)
         f.close()
-        print("[INFO] Image from {0} is different. Saving image...".format(index+1))
 
         cwd = os.getcwd()
         full_path = cwd + "/256_ObjectCategories/258." + user_word + "/" + filepath
 
         if magic.from_file(full_path, mime=True) == 'image/jpeg':
-            print("[INFO] Image from {0} is different. Saving image...".format(index+1))
+            #print("[INFO] Image from {0} is different. Saving image...".format(index+1))
             print(full_path)
         else:
             os.remove(filepath)
-            print("Wrong file type.")
+            print("{0} is a wrong file type.".format(index+1))
 
     except urllib.error.HTTPError as err:
         print(err)

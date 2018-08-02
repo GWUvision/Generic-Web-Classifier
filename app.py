@@ -58,6 +58,7 @@ def index_post():
             '256_ObjectCategories/258.{0}/'.format(user_word), exist_ok=True)
 
         # grab urls
+        #chromedriver is for mac, chromedriver2 is for linux
         cwd = os.getcwd()
         command = "python google_images_download.py --keywords " + user_word + \
             " --limit 200 --chromedriver '{0}/chromedriver'".format(cwd)
