@@ -30,12 +30,23 @@ def upload():
 
 @app.route('/result', methods=['GET', 'POST'])
 def result():
+    
+    path = '256_ObjectCategories'
+    categories = {}
+    for root, dirs, files in os.walk(path, topdown=False):
+        for name in dirs:
+            categories[name.split('.')[0]] = name.split('.')[-1]
 
+    print(categories)
     output = test_network.test_network_classifier(str(session['filepath']), 'example_model')
 
-    print("Your image was of a(n): ", output)
+    # print(str(output).zfill(3))
 
-    return render_template('index.html')
+    result = categories[str(output).zfill(3)]
+    
+    # print(categories[str(output)])
+
+    return render_template('result.html', result=result)
 
 
 
@@ -82,7 +93,7 @@ def index_post():
         end = time.time()
         print('Total time: ', end - begin)
 
-        return render_template('index.html', user_word=request.form['name'])
+        return redirect(url_for('upload'))
 
     elif request.form['name'] is None:
         flash('Please enter a word!')
