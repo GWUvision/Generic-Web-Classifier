@@ -58,10 +58,12 @@ def download_file(index, url):
         f.close()
         print("[INFO] Image from {0} is different. Saving image...".format(index+1))
 
-        full_path = "/Users/kylerood/Generic-Web-Classifier/256_ObjectCategories/258." + user_word + "/" + filepath
+        cwd = os.getcwd()
+        full_path = cwd + "/256_ObjectCategories/258." + user_word + "/" + filepath
 
         if magic.from_file(full_path, mime=True) == 'image/jpeg':
             print("[INFO] Image from {0} is different. Saving image...".format(index+1))
+            print(full_path)
         else:
             os.remove(filepath)
             print("Wrong file type.")
