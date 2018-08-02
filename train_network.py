@@ -37,7 +37,7 @@ from PIL import Image
 
 # initialize the number of epochs to train for, initia learning rate,
 # and batch size
-EPOCHS = 25
+EPOCHS = 5
 INIT_LR = 1e-3
 BS = 32
 path = '256_ObjectCategories'
@@ -54,6 +54,7 @@ for root, dirs, files in os.walk(path, topdown=False):
 
 data = []
 labels = []
+user_word = ''
 
 print(categories)
 
@@ -62,6 +63,10 @@ for c in categories:
     print("[INFO] loading images from " + str(c[1]))
 
     path = '256_ObjectCategories/' + str(c[0]) + '.' + str(c[1])
+
+    if(c[0] == 258):
+        user_word = c[1]
+        print(user_word)
 
     # grab the image paths and randomly shuffle them
     imagePaths = sorted(list(paths.list_images(path)))
@@ -145,8 +150,8 @@ plt.plot(np.arange(0, N), H.history["val_loss"], label="val_loss")
 plt.plot(np.arange(0, N), H.history["acc"], label="train_acc")
 plt.plot(np.arange(0, N), H.history["val_acc"], label="val_acc")
 plt.title(
-    "Training Loss and Accuracy on {0}/NOT {0}".format())
+    "Training Loss and Accuracy on {0}".format("butt"))
 plt.xlabel("Epoch #")
 plt.ylabel("Loss/Accuracy")
 plt.legend(loc="lower left")
-plt.savefig(args["plot"])
+plt.savefig("accuracy.png")

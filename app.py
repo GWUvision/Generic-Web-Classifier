@@ -30,7 +30,7 @@ def upload():
 
 @app.route('/result', methods=['GET', 'POST'])
 def result():
-    
+
     path = '256_ObjectCategories'
     categories = {}
     for root, dirs, files in os.walk(path, topdown=False):
@@ -43,7 +43,7 @@ def result():
     # print(str(output).zfill(3))
 
     result = categories[str(output).zfill(3)]
-    
+
     # print(categories[str(output)])
 
     return render_template('result.html', result=result)
