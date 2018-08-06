@@ -5,6 +5,7 @@ import shutil
 import time
 from flask_uploads import UploadSet, configure_uploads, IMAGES
 import test_network
+import imghdr
 
 STATIC_FOLDER = 'static'
 app = Flask(__name__, static_folder=STATIC_FOLDER)
@@ -65,6 +66,8 @@ def index_post():
         user_word = request.form['name']
         user_word = user_word.replace(" ", "-")
         print("Creating Directory")
+        directory = '256_ObjectCategories/258.{0}/'.format(user_word)
+
         os.makedirs(
             '256_ObjectCategories/258.{0}/'.format(user_word), exist_ok=True)
 
@@ -79,6 +82,20 @@ def index_post():
         # download images
         command = "python imagedownload.py " + user_word
         os.system(command)
+
+        #check that the images are good
+        for file in os.listdir(directory):
+            filename = os.fsdecode(file)
+            filetype = str(imghdr.what(directory + filename))
+            if(filetype != 'png' or filetype != 'jpeg'):
+                print(filetype)
+                os.remove(directory + filename)
+
+
+        for file in os.listdir(directory):
+            filename = os.fsdecode(file)
+            filetype = imghdr.what(directory + filename)
+            print(filetype)
 
         # train network
         command = "python train_network.py"
