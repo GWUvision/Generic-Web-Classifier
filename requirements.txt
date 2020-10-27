@@ -15,7 +15,7 @@ chardet==3.0.4
 chromedriver-binary==2.40.1
 click==6.7
 constantly==15.1.0
-cryptography==2.3
+cryptography==3.2
 cycler==0.10.0
 DateTime==4.2
 decorator==4.3.0
