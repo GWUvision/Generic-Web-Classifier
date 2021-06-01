@@ -87,7 +87,7 @@ termcolor==1.1.0
 treq==17.8.0
 Twisted==18.4.0
 url==0.4.2
-urllib3==1.22
+urllib3==1.26.5
 validators==0.12.2
 weather-api==1.0.4
 Werkzeug==0.14.1
