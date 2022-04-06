@@ -85,7 +85,7 @@ tensorboard==1.8.0
 tensorflow==1.8.0
 termcolor==1.1.0
 treq==17.8.0
-Twisted==18.4.0
+Twisted==22.2.0
 url==0.4.2
 urllib3==1.22
 validators==0.12.2
