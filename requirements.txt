@@ -50,7 +50,7 @@ Markdown==2.6.11
 MarkupSafe==1.0
 matplotlib==2.2.2
 nltk==3.3
-numpy==1.14.4
+numpy==1.22.0
 opencv-python==3.4.1.15
 pandas==0.23.0
 pbr==4.0.4
